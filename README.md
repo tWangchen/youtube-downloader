@@ -6,7 +6,7 @@ YouTube downloader built with Python.
 ## Technical overview
 Provides menu options to:
 1. Download YouTube single video
-2. Download YouTube single audo
+2. Download YouTube single audio
 3. Download YouTube playlist video
 4. Download YouTube playlist audio
 5. Exit

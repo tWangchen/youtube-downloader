@@ -17,7 +17,7 @@ logger.addHandler(file_handler)
 
 menu_options = {
     1: "Download YouTube single video",
-    2: "Download YouTube single audo",
+    2: "Download YouTube single audio",
     3: "Download YouTube playlist video",
     4: "Download YouTube playlist audio",
     5: "Exit",

@@ -15,7 +15,7 @@ logger.addHandler(file_handler)
 
 menu_options = {
     1: "Download YouTube single video",
-    2: "Download YouTube single audo",
+    2: "Download YouTube single audio",
     3: "Download YouTube playlist video",
     4: "Download YouTube playlist audio",
     5: "Exit",
@@ -28,7 +28,6 @@ def print_menu():
 
 
 def download_playlist_video(playlist_link):
-    """Ref: https://pytube.io/en/latest/user/exceptions.html"""
     yt_playlist = Playlist(playlist_link)
     for url in yt_playlist.video_urls:
         try:
@@ -36,12 +35,16 @@ def download_playlist_video(playlist_link):
         except VideoUnavailable:
             logger.exception(f"Video {url} is unavaialable, skipping.")
         else:
-            yt.streams.get_highest_resolution().download(output_path=".")
+            print(f"Downloading: {yt.title}")
+            file = yt.streams.get_highest_resolution().download(output_path=".")
+            base, ext = os.path.splitext(file)
+            new_file = f"{base}_{str(yt.publish_date)[0:10]}{ext}"
+            os.rename(file, new_file)
             logger.info(f"From playlist download video option, downloaded: {url}")
+            print(f"Completed downloading: {yt.title}\n")
 
 
 def download_playlist_audio(playlist_link):
-    """Ref: https://pytube.io/en/latest/user/exceptions.html"""
     yt_playlist = Playlist(playlist_link)
     for url in yt_playlist.video_urls:
         try:
@@ -49,26 +52,35 @@ def download_playlist_audio(playlist_link):
         except VideoUnavailable:
             logger.exception(f"Video {url} is unavaialable, skipping.")
         else:
+            print(f"Downloading: {yt.title}")
             file = yt.streams.get_audio_only().download(output_path=".")
             base, ext = os.path.splitext(file)
-            new_file = f"{base}.mp3"
+            new_file = f"{base}_{str(yt.publish_date)[0:10]}.mp3"
             os.rename(file, new_file)
-            logger.info(f"From playlist download audio option, downloaded: {url}")
+            logger.info(f"From playlist download audio option, downloaded: {yt.title}")
+            print(f"Completed downloading: {yt.title}\n")
 
 
 def download_single_video(single_link):
     yt_single = YouTube(single_link)
-    yt_single.streams.get_highest_resolution().download(output_path=".")
-    logger.info(f"From single download video option, downloaded: {single_link}")
+    print(f"Downloading: {yt_single.title}")
+    file = yt_single.streams.get_highest_resolution().download(output_path=".")
+    base, ext = os.path.splitext(file)
+    new_file = f"{base}_{str(yt_single.publish_date)[0:10]}{ext}"
+    os.rename(file, new_file)
+    logger.info(f"From single download video option, downloaded: {yt_single.title}")
+    print(f"Completed downloading: {yt_single.title}\n")
 
 
 def download_single_audio(single_link):
     yt_single = YouTube(single_link)
+    print(f"Downloading: {yt_single.title}")
     file = yt_single.streams.get_audio_only().download(output_path=".")
     base, ext = os.path.splitext(file)
-    new_file = f"{base}.mp3"
+    new_file = f"{base}_{str(yt_single.publish_date)[0:10]}.mp3"
     os.rename(file, new_file)
-    logger.info(f"From single download audio option, downloaded: {single_link}")
+    logger.info(f"From single download audio option, downloaded: {yt_single.title}")
+    print(f"Completed downloading: {yt_single.title}\n")
 
 
 def main():

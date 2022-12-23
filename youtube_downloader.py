@@ -35,18 +35,7 @@ def download_playlist(playlist_link, audio_video):
         except VideoUnavailable:
             logger.exception(f"Video {single_link} is unavaialable, skipping.")
         else:
-            print(f"Downloading: {yt_single.title}")
-            file = yt_single.streams.get_highest_resolution().download(output_path=".")
-            base, ext = os.path.splitext(file)
-            if audio_video == "video":
-                new_file = f"{base}_{str(yt_single.publish_date)[0:10]}{ext}"
-            elif audio_video == "audio":
-                new_file = f"{base}_{str(yt_single.publish_date)[0:10]}.mp3"
-            os.rename(file, new_file)
-            logger.info(
-                f"From playlist download video option, downloaded: {yt_single.title}"
-            )
-            print(f"Completed downloading: {yt_single.title}\n")
+            download_single(single_link, audio_video)
 
 
 def download_single(single_link, audio_video):
@@ -59,7 +48,7 @@ def download_single(single_link, audio_video):
     elif audio_video == "audio":
         new_file = f"{base}_{str(yt_single.publish_date)[0:10]}.mp3"
     os.rename(file, new_file)
-    logger.info(f"From single download video option, downloaded: {yt_single.title}")
+    logger.info(f"Completed downloading: {yt_single.title}")
     print(f"Completed downloading: {yt_single.title}\n")
 
 

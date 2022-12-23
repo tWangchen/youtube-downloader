@@ -27,59 +27,39 @@ def print_menu():
         print(f"{key} -- {menu_options[key]}")
 
 
-def download_playlist_video(playlist_link):
+def download_playlist(playlist_link, audio_video):
     yt_playlist = Playlist(playlist_link)
-    for url in yt_playlist.video_urls:
+    for single_link in yt_playlist.video_urls:
         try:
-            yt = YouTube(url)
+            yt_single = YouTube(single_link)
         except VideoUnavailable:
-            logger.exception(f"Video {url} is unavaialable, skipping.")
+            logger.exception(f"Video {single_link} is unavaialable, skipping.")
         else:
-            print(f"Downloading: {yt.title}")
-            file = yt.streams.get_highest_resolution().download(output_path=".")
+            print(f"Downloading: {yt_single.title}")
+            file = yt_single.streams.get_highest_resolution().download(output_path=".")
             base, ext = os.path.splitext(file)
-            new_file = f"{base}_{str(yt.publish_date)[0:10]}{ext}"
+            if audio_video == "video":
+                new_file = f"{base}_{str(yt_single.publish_date)[0:10]}{ext}"
+            elif audio_video == "audio":
+                new_file = f"{base}_{str(yt_single.publish_date)[0:10]}.mp3"
             os.rename(file, new_file)
-            logger.info(f"From playlist download video option, downloaded: {url}")
-            print(f"Completed downloading: {yt.title}\n")
+            logger.info(
+                f"From playlist download video option, downloaded: {yt_single.title}"
+            )
+            print(f"Completed downloading: {yt_single.title}\n")
 
 
-def download_playlist_audio(playlist_link):
-    yt_playlist = Playlist(playlist_link)
-    for url in yt_playlist.video_urls:
-        try:
-            yt = YouTube(url)
-        except VideoUnavailable:
-            logger.exception(f"Video {url} is unavaialable, skipping.")
-        else:
-            print(f"Downloading: {yt.title}")
-            file = yt.streams.get_audio_only().download(output_path=".")
-            base, ext = os.path.splitext(file)
-            new_file = f"{base}_{str(yt.publish_date)[0:10]}.mp3"
-            os.rename(file, new_file)
-            logger.info(f"From playlist download audio option, downloaded: {yt.title}")
-            print(f"Completed downloading: {yt.title}\n")
-
-
-def download_single_video(single_link):
+def download_single(single_link, audio_video):
     yt_single = YouTube(single_link)
     print(f"Downloading: {yt_single.title}")
     file = yt_single.streams.get_highest_resolution().download(output_path=".")
     base, ext = os.path.splitext(file)
-    new_file = f"{base}_{str(yt_single.publish_date)[0:10]}{ext}"
+    if audio_video == "video":
+        new_file = f"{base}_{str(yt_single.publish_date)[0:10]}{ext}"
+    elif audio_video == "audio":
+        new_file = f"{base}_{str(yt_single.publish_date)[0:10]}.mp3"
     os.rename(file, new_file)
     logger.info(f"From single download video option, downloaded: {yt_single.title}")
-    print(f"Completed downloading: {yt_single.title}\n")
-
-
-def download_single_audio(single_link):
-    yt_single = YouTube(single_link)
-    print(f"Downloading: {yt_single.title}")
-    file = yt_single.streams.get_audio_only().download(output_path=".")
-    base, ext = os.path.splitext(file)
-    new_file = f"{base}_{str(yt_single.publish_date)[0:10]}.mp3"
-    os.rename(file, new_file)
-    logger.info(f"From single download audio option, downloaded: {yt_single.title}")
     print(f"Completed downloading: {yt_single.title}\n")
 
 
@@ -90,16 +70,16 @@ def main():
         try:
             if option == 1:
                 single_link = input("Enter YouTube link for video download: ")
-                download_single_video(single_link)
+                download_single(single_link, "video")
             elif option == 2:
                 single_link = input("Enter YouTube link for audio download: ")
-                download_single_audio(single_link)
+                download_single(single_link, "audio")
             elif option == 3:
                 playlist_link = input("Enter YouTube playlist for video download: ")
-                download_playlist_video(playlist_link)
+                download_playlist(playlist_link, "video")
             elif option == 4:
                 playlist_link = input("Enter YouTube playlist for audio download: ")
-                download_playlist_audio(playlist_link)
+                download_playlist(playlist_link, "audio")
             elif option == 5:
                 exit()
         except Exception as e:

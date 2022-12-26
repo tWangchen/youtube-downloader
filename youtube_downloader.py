@@ -43,10 +43,11 @@ def download_single(single_link, audio_video):
     print(f"Downloading: {yt_single.title}")
     file = yt_single.streams.get_highest_resolution().download(output_path=".")
     base, ext = os.path.splitext(file)
+    publish_date = str(yt_single.publish_date)[0:10]
     if audio_video == "video":
-        new_file = f"{base}_{str(yt_single.publish_date)[0:10]}{ext}"
+        new_file = f"{base}_{publish_date}{ext}"
     elif audio_video == "audio":
-        new_file = f"{base}_{str(yt_single.publish_date)[0:10]}.mp3"
+        new_file = f"{base}_{publish_date}.mp3"
     os.rename(file, new_file)
     logger.info(f"Completed downloading: {yt_single.title}")
     print(f"Completed downloading: {yt_single.title}\n")

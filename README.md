@@ -1,5 +1,5 @@
 ## Purpose
-YouTube downloader built with Python.
+YouTube downloader written in Python with [pytube](https://pytube.io/en/latest/).  
 
 
 
@@ -12,4 +12,4 @@ Provides menu options to:
 5. Exit
 
 ## Note
-This is a side, hoby project; therefore, not actively maintained.
+This is a side, purpose built project; only maintained as required.

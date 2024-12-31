@@ -1,7 +1,10 @@
 import logging
 import os
 
-from pytube import Playlist, YouTube
+from pytubefix import Playlist, YouTube
+
+# from pytube import Playlist, YouTube
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
